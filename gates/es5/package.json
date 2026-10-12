@@ -1,0 +1,12 @@
+{
+  "name": "gate-es5",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WebSquare 화면·JS 파일 ES5 문법 검사",
+  "bin": {
+    "check-es5": "check-es5.js"
+  },
+  "dependencies": {
+    "acorn": "8.15.0"
+  }
+}

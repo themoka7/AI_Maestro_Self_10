@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:w2="http://www.inswave.com/websquare" xmlns:xf="http://www.w3.org/2002/xforms">
+  <head>
+    <w2:type>DEFAULT</w2:type>
+    <script type="text/javascript" lazy="false"><![CDATA[
+scwin.onpageload = function () {
+    scwin.fn_search();
+};
+
+scwin.fn_search = function () {
+    var param = { year: ica_year.getValue(), term: sbx_term.getValue() };
+    for (var i = 0; i < 3; i++) {
+        param['k' + i] = i;
+    }
+    $c.sbm.execute(sbm_search, param);
+};
+]]></script>
+  </head>
+  <body ev:onpageload="scwin.onpageload"></body>
+</html>

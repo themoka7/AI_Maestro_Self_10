@@ -1,0 +1,13 @@
+-- 학생 비상연락 조회 (연락처 조회가 업무상 필요한 화면)
+-- PII-APPROVED: 학생지원과 비상연락 업무, 개인정보 영향 검토 완료 : MOBILE_NO, EMAIL
+CREATE OR REPLACE PROCEDURE SP_STD_CONTACT (
+    P_STD_NO IN  VARCHAR2,
+    O_CUR    OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN O_CUR FOR
+    SELECT STD_NO, STD_NM, MOBILE_NO, EMAIL
+      FROM TB_STD_MST
+     WHERE STD_NO = P_STD_NO;
+END;
+/
