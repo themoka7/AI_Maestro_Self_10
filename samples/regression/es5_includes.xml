@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  재현 유형: ES5 위반 - Array.prototype.includes (ES2016 API)
+  기대 탐지: [미지원 API] Array/String.prototype.includes
+  기대 줄: 18
+  비고: 실제 운영 결함이 아니라 과거 결함 유형을 재현한 회귀 시험 사례
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:w2="http://www.inswave.com/websquare">
+  <head>
+    <w2:type>DEFAULT</w2:type>
+    <script type="text/javascript" lazy="false"><![CDATA[
+scwin.onpageload = function () {
+    scwin.fn_search();
+};
+
+scwin.fn_search = function () {
+    var allowed = ["10", "20"];
+    if (allowed.includes(sbx_div.getValue())) {
+        $c.sbm.execute(sbm_search, {});
+    }
+};
+]]></script>
+  </head>
+  <body ev:onpageload="scwin.onpageload"></body>
+</html>
