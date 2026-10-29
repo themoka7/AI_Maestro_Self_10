@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>졸업사정 · 성적표 확인 | 교육정보시스템 (설계 데모)</title>
+<link rel="stylesheet" href="https://one.pusan.ac.kr/common/css/style_ses.css?postfix=17932334381265015.9148462596095">
+<style>
+:root{--g1:#046ad8;--g1h:#045fc2;--g1d:#053b76;--g2:#009a53;--g2h:#008044;--hd2:#046ad8;--rail:#046ad8;--rail2:#009a53;--pri:#1d5fb4;--navy:#0f3a7d;--line:#c9d1dc;--line2:#dde3ea;--panel:#f0f2f5;--schl:#d6e0ee;--sch:#e9eef6;--red:#e0233a;--sel:#d6e6fa;--gh:#eef1f5;--ok:#1a8f4c;--warn:#d88400;--err:#d62d3a;--sub:#666}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Nanum Gothic","나눔고딕","NanumGothic","Malgun Gothic","맑은 고딕",sans-serif;font-size:13px;color:#333;background:#fff;overflow:hidden}
+button,input,select{font-family:inherit;font-size:13px}
+.top{height:40px;background:#0b3b85;color:#fff;display:flex;align-items:center;padding:0 12px 0 0;gap:12px}
+.top .ham{width:54px;display:flex;justify-content:center;cursor:pointer}
+.top .ham svg{width:22px;height:22px}
+.top .logo{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:400;letter-spacing:-.2px}
+.top .logo i{width:26px;height:26px;border-radius:50%;background:#fff;color:#0b3b85;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:8px;font-weight:800}
+.top .r{margin-left:auto;display:flex;gap:16px;align-items:center;font-size:12px}
+.top .r svg{width:18px;height:18px;display:block}
+.top .pill{border:1px solid #fff;border-radius:11px;padding:0 7px;font-size:11px;line-height:17px}
+.top .usr{display:flex;align-items:center;gap:3px}
+.wrap{display:flex;height:calc(100% - 40px)}
+.rail{width:54px;background:var(--g1);color:#fff;flex:none;overflow:hidden}
+.rail div{text-align:center;font-size:10px;padding:8px 0 7px;letter-spacing:-.5px;cursor:pointer}
+.rail div b{display:block;font-size:17px;line-height:19px;font-weight:400}
+.rail .on{background:var(--g1d)}
+.rail .g{background:var(--g2)}
+.lnb{width:158px;border-right:1px solid #d5d9df;flex:none;overflow:auto;transition:width .2s;background:#fff}
+.lnb.hide{width:0;border:0}
+.lnb .lh{display:flex;align-items:center;justify-content:space-between;padding:12px 10px 10px 10px}
+.lnb .lh h2{font-size:18px;margin:0;font-weight:800;color:#222}
+.lnb .lh span{color:#888;font-size:15px}
+.lnb .ls{display:flex;margin:0 8px 8px;border:1px solid #d5d9df;height:28px}
+.lnb .ls input{flex:1;min-width:0;border:0;padding:0 8px;font-size:11.5px}
+.lnb .ls span{width:26px;border-left:1px solid #d5d9df;display:flex;align-items:center;justify-content:center;color:#999;font-size:13px}
+.lnb .m1{display:flex;justify-content:space-between;align-items:center;padding:0 10px 0 6px;height:30px;font-size:13.5px;color:#222;border-top:1px solid #e3e6ea;cursor:pointer}
+.lnb .m1 span{color:#555;font-size:16px}
+.lnb .m2{background:#e2e8ef;padding:0 8px;height:27px;display:flex;align-items:center;font-size:12px;font-weight:700;color:#222;border-top:1px solid #fff}
+.lnb .m2.on{background:var(--g1);color:#fff}
+.lnb .m3{padding:4px 8px 3px 12px;font-size:11.5px;color:#333;line-height:1.35}
+.lnb .m3.f:before{content:"› ";color:#666}
+.lnb .m3.fo:before{content:"⌄ ";color:#666}
+.lnb ul{list-style:none;margin:0;padding:0 6px 4px 20px}
+.lnb li{font-size:11.5px;color:#333;padding:3px 0;line-height:1.35}
+.lnb li:before{content:"· "}
+.lnb li.cur{color:#000;font-weight:800}
+.lnb .new{background:var(--red);color:#fff;font-size:9px;padding:0 3px;border-radius:2px;margin-left:2px}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;padding:8px 12px 0}
+.tabs{display:flex;align-items:flex-end;border-bottom:1px solid var(--g1);height:24px}
+.tabs .t{padding:3px 12px;border:1px solid #cfd5dd;border-bottom:0;font-size:12px;margin-right:2px;background:#f4f6f9;white-space:nowrap;color:#444;line-height:16px}
+.tabs .t.p{background:var(--g1);color:#fff;border-color:var(--g1);font-weight:700}
+.tabs .t.on{background:#fff;border:1px solid var(--g1);border-bottom:1px solid #fff;font-weight:700;color:#111;position:relative;top:1px}
+.tabs .tr{margin-left:auto;display:flex;gap:12px;color:#666;font-size:14px;padding-bottom:3px}
+.bc{font-size:11px;color:#666;margin:9px 0 0;display:flex;align-items:center;gap:5px}
+.bc svg{width:13px;height:13px}
+/* 타이틀: 실제 졸업사정 화면 .content > .sec-1:first-child > .sec-header 기준 */
+@font-face{font-family:"Nanum Gothic";font-style:normal;font-weight:300;src:url(https://one.pusan.ac.kr/common/fonts/NanumGothicL.woff2) format("woff2"),url(https://one.pusan.ac.kr/common/fonts/NanumGothicL.woff) format("woff"),url(https://one.pusan.ac.kr/common/fonts/NanumGothicL.ttf) format("truetype")}
+.ttl{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:10px 0 8px;margin-bottom:0;border-bottom:1px solid #101010;background:#fff;position:relative;font-family:"Nanum Gothic","Helvetica",sans-serif}
+.ttl::after{content:"";position:absolute;bottom:-1px;right:0;width:15px;height:1px;background:#fff}
+.ttl h1{font-size:15px;margin:0;font-weight:800;color:#222}
+.ttl+.sch{border-top:1px solid #3d5a8c}
+.ttl .ic{display:flex;align-items:center;gap:13px;color:#666;margin-left:8px}
+.ttl .ic svg{width:18px;height:18px;display:block}
+.ttl .ic .star{color:var(--g1)}
+.ttl .lt{display:flex;align-items:center}
+.ttl .btns{margin-left:auto;display:flex;gap:4px}
+.b{height:26px;padding:0 10px;border:1px solid #4f86cf;background:#fff;color:#1d5fb4;border-radius:2px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.b.s{height:24px;padding:0 8px;font-size:12px}
+.b.pri{background:var(--navy);border-color:var(--navy);color:#fff}
+.b.blu{background:var(--g1);border-color:var(--g1);color:#fff}
+.b.grn{background:var(--g2);border-color:var(--g2);color:#fff}
+.b.gr{background:#666;border-color:#666;color:#fff}
+.b.org{background:rgb(240,104,16);border-color:rgb(240,104,16);color:#fff}
+.b.red{border-color:var(--err);color:var(--err)}
+.b:disabled{opacity:.4;cursor:not-allowed}
+.sch{display:grid;grid-template-columns:100px 1fr 100px 1fr 90px 1fr 90px 1fr;border-top:2px solid #3d5a8c;background:var(--sch)}
+.sch label{background:var(--schl);display:flex;align-items:center;justify-content:flex-end;padding:0 8px;font-weight:700;font-size:12px;height:29px;border-bottom:1px solid #fff;color:#333;white-space:nowrap}
+.sch label em{color:var(--red);font-style:normal;margin-right:3px}
+.sch>div{display:flex;align-items:center;gap:4px;padding:0 6px;height:30px;border-bottom:1px solid #fff}
+.sch select,.sch input[type=text],.sch input[type=number]{width:100%;height:22px;border:1px solid #cdd3db;color:#555;background:#fff;padding:0 5px;min-width:0}
+.sch .note{color:var(--red);font-size:11.5px;font-weight:700;white-space:nowrap}
+.body{flex:1;min-height:0;display:flex;gap:12px;padding:10px 0 8px}
+.left{width:470px;flex:none;display:flex;flex-direction:column;min-height:0}
+.right{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
+.sh{display:flex;align-items:center;gap:6px;margin-bottom:5px;min-height:24px}
+.sh .dot{width:14px;height:14px;border-radius:50%;background:conic-gradient(#12a150 0 50%,#0b62d0 50% 100%);position:relative;flex:none}
+.sh .dot:after{content:"";position:absolute;inset:3px;background:#fff;border-radius:50%}
+.sh h3{font-size:13.5px;margin:0;white-space:nowrap}
+.sh h3 .n{color:var(--red)}
+.sh .btns{margin-left:auto;display:flex;gap:4px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:3px;font-size:12px;border:1px solid var(--line);border-radius:12px;padding:1px 8px;cursor:pointer;background:#fff;white-space:nowrap}
+.chip.on{background:#fde6e8;border-color:#f2b8be;color:var(--err);font-weight:700}
+.grid{border:1px solid #b9c2cd;background:var(--panel);display:flex;flex-direction:column;min-height:0;flex:1}
+.gdrop{font-size:11.5px;color:#999;padding:5px 8px;border-bottom:1px solid #b9c2cd}
+.gbody{overflow:auto;background:#fff;flex:1}
+table.g{border-collapse:collapse;width:100%;table-layout:fixed}
+table.g th{background:var(--gh);border:1px solid #cfd6de;border-top:0;height:30px;font-size:11.5px;font-weight:700;position:sticky;top:0;z-index:1;line-height:1.15}
+table.g td{border:1px solid #e1e5ea;height:24px;padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
+table.g tr:nth-child(even) td{background:#fafbfc}
+table.g tbody tr{cursor:pointer}
+table.g tr.sel td{background:var(--sel)!important}
+table.g td.c{text-align:center} table.g td.r{text-align:right}
+table.g tr.mis td{background:#fff3f4}
+table.g tr.chg td{background:#eef5ff}
+table.g td select{width:100%;height:20px;border:1px solid #c4ccd6;font-size:12px}
+.badge{display:inline-block;padding:0 6px;border-radius:9px;font-size:11px;font-weight:700;line-height:17px;white-space:nowrap}
+.bg-ok{background:#e3f4ea;color:var(--ok)} .bg-w{background:#fff2dc;color:var(--warn)} .bg-e{background:#fde6e8;color:var(--err)} .bg-g{background:#e9edf2;color:#555} .bg-b{background:#e2ecfb;color:var(--pri)}
+.yn-N{color:var(--err);font-weight:700}
+/* 학생 헤더 */
+.stu{border:1px solid var(--line);border-top:2px solid #0b3f86;background:#f8fafc;padding:7px 10px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.stu .nm{font-size:15px;font-weight:800}
+.stu .kv{font-size:12px;color:#444}
+.stu .kv b{color:#111}
+.stu .res{margin-left:auto;display:flex;gap:6px;align-items:center}
+.alert{border:1px solid #f2c7cb;background:#fff6f7;border-left:4px solid var(--err);padding:6px 10px;font-size:12.5px;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.alert.okk{border-color:#bfe3cc;background:#f4fbf6;border-left-color:var(--ok)}
+.alert .grow{flex:1}
+.rtabs{display:flex;border-bottom:1px solid var(--line)}
+.rtabs div{padding:6px 14px;border:1px solid var(--line);border-bottom:0;margin-right:-1px;background:#f4f6f8;cursor:pointer;font-size:12.5px;white-space:nowrap}
+.rtabs div.on{background:#fff;font-weight:700;border-top:2px solid var(--hd2);position:relative;top:1px}
+.rtabs div .badge{margin-left:3px}
+.pane{flex:1;min-height:0;border:1px solid var(--line);border-top:0;display:none;flex-direction:column}
+.pane.on{display:flex}
+/* 뷰어 */
+.viewer{background:#e5e7ea;flex:1;overflow:auto;display:flex;flex-direction:column}
+.vbar{background:#3a3d42;color:#fff;display:flex;align-items:center;justify-content:center;gap:14px;height:38px;flex:none;font-size:12px;position:sticky;top:0;z-index:2}
+.vbar span{cursor:pointer}
+.vbar .pg{background:#fff;color:#222;padding:1px 8px;border-radius:2px}
+.paper{background:#fff;margin:12px auto 20px;width:calc(100% - 24px);max-width:1080px;padding:18px 20px 16px;box-shadow:0 1px 4px rgba(0,0,0,.25);font-family:"Gulim","굴림","Malgun Gothic",sans-serif;color:#000}
+.paper h2{text-align:center;font-size:18px;margin:0 0 12px;letter-spacing:1px}
+.ph{display:grid;grid-template-columns:1.1fr 1fr 1.3fr 1.2fr;font-size:11.5px;font-weight:700;gap:2px 8px;margin-bottom:6px}
+.ph .rt{text-align:right;font-weight:400}
+.pcols{border:1px solid #000;display:grid;grid-template-columns:repeat(var(--pc,3),1fr)}
+.pcol{border-right:1px solid #000;min-width:0}
+.pcol:last-child{border-right:0}
+.phd{display:grid;grid-template-columns:44px 58px 1fr 44px 26px 26px;font-size:10.5px;font-weight:700;border-bottom:1px solid #000;padding:2px 3px}
+.pgrp{border-bottom:1px dashed #666;padding:3px 0}
+.prow{display:grid;grid-template-columns:44px 58px 1fr 44px 26px 26px;font-size:10.5px;padding:0 3px;line-height:15px}
+.prow span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow .r{text-align:right}.prow .c{text-align:center}
+.prow.mis{background:#ffe3e6;outline:1px solid #f39aa4;cursor:pointer}
+.prow.chg{background:#e3eeff;cursor:pointer}
+.prow .mk{color:var(--err);font-weight:700}
+.prow.chg .mk{color:var(--pri)}
+.pinfo{font-size:10.5px;padding:3px 4px;border-bottom:1px solid #000}
+.pinfo b{display:block;font-size:11px}
+.pfoot{display:grid;grid-template-columns:1fr 230px 170px;border:1px solid #000;border-top:0;font-size:11px}
+.pfoot table{border-collapse:collapse;width:100%}
+.pfoot td,.pfoot th{padding:1px 4px;text-align:right;font-weight:400;white-space:nowrap}
+.pfoot th{text-align:center}
+.pfoot td:first-child{text-align:left}
+.pfoot .nt{border-left:1px solid #000;padding:3px 6px;line-height:16px}
+.pfoot .tt{border-left:1px solid #000;padding:4px 8px;font-weight:700;line-height:21px}
+.legend{font-size:11px;color:#444;margin-top:6px;display:flex;gap:14px}
+.legend i{display:inline-block;width:12px;height:10px;vertical-align:-1px;margin-right:3px}
+/* 결과 */
+.rpad{padding:10px;overflow:auto;flex:1}
+.proj{border:1px dashed #9fb8e0;background:#f5f9ff;padding:8px 10px;border-radius:4px;margin:10px 0;font-size:12.5px;line-height:1.7}
+.sub{font-weight:700;margin:12px 0 5px;font-size:13px}
+/* 모달 */
+.mdim{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:50}
+.mdim.on{display:flex}
+.modal{background:#fff;width:1000px;max-width:96vw;max-height:92vh;display:flex;flex-direction:column;border-top:3px solid var(--pri);box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.modal .mh{padding:10px 14px;font-weight:700;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;font-size:14px}
+.modal .mb{padding:12px 14px;overflow:auto;flex:1;font-size:12.5px}
+.modal .mf{padding:10px 14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:6px}
+.frm{display:grid;grid-template-columns:110px 1fr 110px 1fr;border-top:2px solid #0b3f86;margin-bottom:10px}
+.frm label{background:var(--schl);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:flex-end;padding:0 8px;min-height:30px;border-bottom:1px solid #fff;white-space:nowrap}
+.frm>div{display:flex;align-items:center;gap:8px;padding:3px 8px;border-bottom:1px solid var(--line2);flex-wrap:wrap}
+.frm select,.frm input[type=text]{height:24px;border:1px solid #c4ccd6;padding:0 5px}
+.frm .req{color:var(--red)}
+.impact{font-size:13px;font-weight:700}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:#1f2d3d;color:#fff;padding:10px 18px;border-radius:4px;opacity:0;transition:.25s;pointer-events:none;z-index:99}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.demo{position:fixed;right:14px;bottom:8px;background:#fff8d6;border:1px solid #e8d27a;color:#6a5500;font-size:11px;padding:3px 8px;border-radius:3px;z-index:40}
+.muted{color:var(--sub);font-size:11.5px}
+.arrow{color:#999;margin:0 3px}
+.names{font-size:11px;color:#555;white-space:normal!important;line-height:1.4;padding:3px 6px!important}
+@media print{
+  body{overflow:visible}
+  body *{visibility:hidden}
+  #paper,#paper *{visibility:visible}
+  #paper{position:absolute;left:0;top:0;width:100%;max-width:none;margin:0;box-shadow:none}
+  .prow.mis,.prow.chg{background:none;outline:0}
+  @page{size:A4 landscape;margin:8mm}
+}
+</style>
+</head>
+<body>
+<div class="top">
+  <span class="ham" onclick="document.getElementById('lnb').classList.toggle('hide')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>
+  <span class="logo"><i>PNU</i>부산대학교 교육정보시스템</span>
+  <div class="r"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3v18M12 8h5M12 12h5"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15zM10 20a2 2 0 004 0"/></svg></span><span><svg viewBox="0 0 24 24" fill="currentColor"><g><rect x="3" y="3" width="4" height="4"/><rect x="3" y="10" width="4" height="4"/><rect x="3" y="17" width="4" height="4"/><rect x="10" y="3" width="4" height="4"/><rect x="10" y="10" width="4" height="4"/><rect x="10" y="17" width="4" height="4"/><rect x="17" y="3" width="4" height="4"/><rect x="17" y="10" width="4" height="4"/><rect x="17" y="17" width="4" height="4"/></g></svg></span><span class="pill">교내</span><span>08:12:40</span><span class="usr"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3.5" fill="#0b3b85"/><path d="M5.5 18.5a7.5 7.5 0 0113 0" fill="#0b3b85"/></svg>김정목 ▾</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4H5v16h9M10 12h10M16 8l4 4-4 4"/></svg></span></div>
+</div>
+<div class="wrap">
+  <div class="rail">
+    <div><b>⚙</b>공통</div><div><b>▤</b>개인용</div><div class="on"><b>🎓︎</b>학사</div><div><b>▥</b>행정</div><div><b>▥</b>PIP(행정)</div><div><b>⌕</b>입학</div><div><b>▦</b>산단ERP</div><div><b>⌂</b>KORUS</div><div><b>▭</b>메시지발송</div><div><b>ⓘ</b>가이드</div>
+    <div class="g"><b>⌕</b>교직원검색</div><div class="g"><b>✉</b>웹메일</div><div class="g"><b>▤</b>바로가기</div><div class="g"><b>▦</b>일정관리</div>
+  </div>
+  <div class="lnb" id="lnb">
+    <div class="lh"><h2>학사</h2><span>📌︎</span></div>
+    <div class="ls"><input placeholder="메뉴 검색"><span>⤢</span></div>
+    <div class="m1">강의시수<span>+</span></div><div class="m1">교육과정<span>+</span></div><div class="m1">학적<span>+</span></div><div class="m1">성적<span>+</span></div>
+    <div class="m1">졸업<span>−</span></div>
+    <div class="m2">› 대학원졸업</div>
+    <div class="m2 on">⌄ 학부졸업</div>
+    <div class="m3 f">졸업요건관리</div>
+    <div class="m3 f">졸업대상자관리</div>
+    <div class="m3 f">예비사정관리</div>
+    <div class="m3 fo">졸업사정관리</div>
+    <ul><li class="cur">졸업사정 <span class="new">개선</span></li><li>심화과정대상자 관리 및 사정</li><li>졸업사정 결과표 출력</li><li>졸업사정 예외사항관리</li><li>학생별 졸업정보 조회</li><li>졸업사정 오류자 조회</li><li>졸업확정관리</li></ul>
+    <div class="m3 f">졸업사정용 자료 출력</div>
+  </div>
+
+  <div class="main">
+    <div class="tabs">
+      <span class="t p">업무포털</span><span class="t">졸업사정기준통합관리 ✕</span><span class="t">졸업대상자관리 ✕</span>
+      <span class="t on">졸업사정 ✕</span><span class="t">졸업사정용성적표 출력 ✕</span>
+      <span class="tr"><span>⛶</span><span>‹</span><span>›</span><span>⊠</span><span>✕</span><span>≡</span></span>
+    </div>
+    <div class="bc"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3z"/></svg> › 학사 › 졸업 › 학부졸업 › 졸업사정관리 › 졸업사정</div>
+    <div class="ttl">
+      <div class="lt"><h1>졸업사정</h1><span class="ic"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span><span class="star"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12a8 8 0 11-2.3-5.7M20 4v5h-5"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 19a6 6 0 0112 0M13 19a6 6 0 018 0"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15zM10 20a2 2 0 004 0"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 015 0c0 2-2.5 2-2.5 4M12 17h.01"/></svg></span></span></div>
+      <div class="btns">
+        <button class="b gr" onclick="openM('mGuide')">안내보기</button>
+        <button class="b" onclick="toast('워크플로우: 대상자생성 → 예비사정 → 본사정 → 결과확정 (데모)')">워크플로우</button>
+        <button class="b org" onclick="openBulk()">교과목구분 일괄변경</button>
+        <button class="b" onclick="openHist()">변경이력</button>
+        <button class="b blu" onclick="runAssess(true)">졸업사정</button>
+        <button class="b pri" onclick="doQuery()">조회</button>
+        <button class="b" onclick="toast('엑셀 다운로드 (데모)')">엑셀</button>
+      </div>
+    </div>
+    <div class="sch">
+      <label><em>*</em>학년도/학기</label><div><input type="number" value="2026" style="width:64px"><select style="width:70px"><option>1학기</option><option>2학기</option></select><span class="note">※ 2025학년도 후기</span></div>
+      <label><em>*</em>단과대학</label><div><select><option>공과대학</option></select></div>
+      <label>학과(부)</label><div><select><option>산업공학과</option></select></div>
+      <label>전공</label><div><select><option>전체</option></select></div>
+      <label>대상자구분</label><div style="font-size:12px;gap:8px"><label style="all:unset"><input type="radio" name="tg"> 예비사정</label><label style="all:unset"><input type="radio" name="tg" checked> 본사정</label></div>
+      <label>졸업가능</label><div><select id="fPass" onchange="renderList()"><option value="">전체</option><option>Y</option><option>N</option></select></div>
+      <label>구분상이</label><div><select id="fMis" onchange="renderList()"><option value="">전체</option><option value="Y">상이 있음</option><option value="I">졸업가능 영향 있음</option><option value="N">상이 없음</option></select></div>
+      <label>학번/이름</label><div><input type="text" id="fKey" placeholder="학번 또는 성명" oninput="renderList()"></div>
+    </div>
+
+    <div class="body">
+      <!-- 좌: 대상자 목록 -->
+      <div class="left">
+        <div class="sh"><span class="dot"></span><h3>졸업 대상자 목록 (총<span class="n" id="lCnt">0</span>건)</h3>
+          <div class="btns"><span class="muted" id="lSum"></span></div></div>
+        <div class="grid"><div class="gdrop">졸업대상자관리에서 생성된 대상자 · 행을 클릭하면 우측에 성적표가 표시됩니다.</div>
+          <div class="gbody"><table class="g" id="tList"><colgroup><col style="width:26px"><col style="width:74px"><col style="width:52px"><col style="width:34px"><col style="width:44px"><col style="width:44px"><col style="width:44px"><col style="width:58px"><col style="width:64px"></colgroup>
+            <thead><tr><th><input type="checkbox" id="chkAll" onclick="event.stopPropagation();checkAll(this.checked)"></th><th>학번</th><th>성명</th><th>이수<br>학기</th><th>교육과정<br>적용년도</th><th>졸업요건<br>통과여부</th><th>졸업가능<br>여부</th><th>학적신청<br>내역</th><th>교과목구분<br>상이</th></tr></thead><tbody></tbody></table></div></div>
+      </div>
+
+      <!-- 우: 상세 -->
+      <div class="right">
+        <div class="stu" id="stuHead"></div>
+        <div id="stuAlert"></div>
+        <div class="rtabs" id="rtabs">
+          <div data-t="p1" class="on">졸업사정용 성적표</div>
+          <div data-t="p2">이수과목 · 교과목구분 <span class="badge bg-e" id="misBadge">0</span></div>
+          <div data-t="p3">사정결과</div>
+          <div data-t="p4">변경이력 <span class="badge bg-g" id="histBadge">0</span></div>
+        </div>
+        <div class="pane on" id="p1">
+          <div class="viewer">
+            <div class="vbar"><span onclick="window.print()">💾︎ SAVE</span><span onclick="window.print()">🖶 PRINT</span><span>⏮</span><span>◀</span><span class="pg">1 / 1</span><span>▶</span><span>⏭</span>
+              <select id="zoom" onchange="document.getElementById('paper').style.zoom=this.value" style="height:22px;font-size:12px"><option value="0.85">85%</option><option value="1" selected>100%</option><option value="1.15">115%</option></select>
+              <label style="display:flex;gap:4px;align-items:center;cursor:pointer"><input type="checkbox" id="hl" checked onchange="renderPaper()"> 구분상이 표시</label></div>
+            <div class="paper" id="paper"></div>
+          </div>
+        </div>
+        <div class="pane" id="p2">
+          <div style="display:flex;gap:6px;align-items:center;padding:6px 8px;border-bottom:1px solid var(--line2);flex-wrap:wrap">
+            <span class="chip" id="onlyMis" onclick="this.classList.toggle('on');renderCourses()">▲ 상이 과목만</span>
+            <span class="muted">성적상 이수구분과 <b id="cyLbl"></b> 교육과정 이수구분을 비교합니다.</span>
+            <div style="margin-left:auto;display:flex;gap:4px">
+              <button class="b s" onclick="applyCurToSelected()">선택 과목 교육과정 기준 적용</button>
+              <button class="b s pri" onclick="saveManual()">저장</button></div>
+          </div>
+          <div class="gbody"><table class="g" id="tCourse"><colgroup><col style="width:26px"><col style="width:52px"><col style="width:74px"><col><col style="width:34px"><col style="width:58px"><col style="width:34px"><col style="width:92px"><col style="width:74px"><col style="width:52px"></colgroup>
+            <thead><tr><th><input type="checkbox" onclick="event.stopPropagation();document.querySelectorAll('#tCourse tbody input[type=checkbox]').forEach(c=>c.checked=this.checked)"></th><th>상태</th><th>교과목코드</th><th>교과목명</th><th>학점</th><th>수강<br>년도/학기</th><th>성적</th><th>성적 이수구분<br>(사정용)</th><th>교육과정<br>이수구분</th><th>교양<br>영역</th></tr></thead><tbody></tbody></table></div>
+        </div>
+        <div class="pane" id="p3"><div class="rpad" id="resBody"></div></div>
+        <div class="pane" id="p4"><div class="gbody"><table class="g" id="tHist"><colgroup><col style="width:120px"><col style="width:120px"><col><col style="width:150px"><col style="width:160px"><col style="width:64px"><col style="width:52px"></colgroup>
+          <thead><tr><th>처리일시</th><th>처리번호</th><th>교과목</th><th>변경내용</th><th>사유</th><th>처리자</th><th>원복</th></tr></thead><tbody></tbody></table></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 일괄변경 모달 -->
+<div class="mdim" id="mBulk"><div class="modal">
+  <div class="mh">교과목구분 일괄변경 · 교육과정 기준 이수구분 적용 <span style="cursor:pointer" onclick="closeM('mBulk')">✕</span></div>
+  <div class="mb">
+    <div class="frm">
+      <label>적용 대상자</label><div>
+        <label style="all:unset;cursor:pointer"><input type="radio" name="bs" value="ALL" checked onchange="renderBulk()"> 조회된 대상자 전체 (<b id="bsAll">0</b>명)</label>
+        <label style="all:unset;cursor:pointer"><input type="radio" name="bs" value="CHK" onchange="renderBulk()"> 목록에서 체크한 대상자 (<b id="bsChk">0</b>명)</label></div>
+      <label>보기</label><div>
+        <label style="all:unset;cursor:pointer"><input type="checkbox" id="bImp" onchange="renderBulk()"> 졸업가능에 영향 있는 건만</label></div>
+      <label>반영 대상</label><div style="grid-column:2/5">
+        <label style="all:unset;cursor:pointer"><input type="radio" name="bt" value="ASSESS" checked> 졸업사정용 이수구분만 변경 <span class="muted">(성적원장 유지 · 사정/사정용성적표에만 반영)</span></label>
+        <label style="all:unset;cursor:pointer"><input type="radio" name="bt" value="GRADE"> 성적원장 이수구분 변경 <span class="muted">(학생 성적표에도 반영 · 성적 담당 승인 필요)</span></label></div>
+    </div>
+    <div class="grid" style="max-height:340px"><div class="gbody"><table class="g" id="tBulk"><colgroup><col style="width:28px"><col style="width:62px"><col style="width:82px"><col><col style="width:36px"><col style="width:210px"><col style="width:52px"><col style="width:120px"><col style="width:48px"></colgroup>
+      <thead><tr><th><input type="checkbox" id="bAll" onclick="event.stopPropagation();bulkAll(this.checked)"></th><th>적용<br>교육과정</th><th>교과목코드</th><th>교과목명</th><th>학점</th><th>이수구분 변경 (현재 → 변경)</th><th>대상<br>(명)</th><th>졸업가능 영향<br>(단독 적용 시)</th><th>대상자</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="frm" style="margin-top:10px">
+      <label><span class="req">*</span> 변경사유</label><div><select id="bReason"><option value="">선택</option><option>교육과정 기준 이수구분 적용</option><option>재입학·편입 교육과정 변경</option><option>교과목 이수구분 변경(학과 요청)</option><option>기타</option></select></div>
+      <label>비고</label><div><input type="text" id="bMemo" style="width:100%" placeholder="예) 2024 교육과정 개편에 따른 시설계획및설계 이수구분 정정"></div>
+      <label>후속처리</label><div style="grid-column:2/5"><label style="all:unset;cursor:pointer"><input type="checkbox" id="bRe" checked> 변경 후 대상자 즉시 재사정</label></div>
+    </div>
+  </div>
+  <div class="mf"><span class="impact" id="bImpact"></span><span style="margin-left:auto"></span><button class="b" onclick="closeM('mBulk')">취소</button><button class="b org" onclick="applyBulk()">일괄변경</button></div>
+</div></div>
+
+<!-- 변경이력(전체) 모달 -->
+<div class="mdim" id="mHist"><div class="modal" style="width:860px">
+  <div class="mh">교과목구분 변경이력 (전체) <span style="cursor:pointer" onclick="closeM('mHist')">✕</span></div>
+  <div class="mb"><div class="grid" style="max-height:60vh"><div class="gbody"><table class="g" id="tHistAll"><colgroup><col style="width:140px"><col style="width:130px"><col><col style="width:70px"><col style="width:70px"><col style="width:70px"></colgroup>
+    <thead><tr><th>처리번호</th><th>처리일시</th><th>사유 / 내용</th><th>건수</th><th>처리자</th><th>원복</th></tr></thead><tbody></tbody></table></div></div></div>
+  <div class="mf"><span style="margin-left:auto"></span><button class="b pri" onclick="closeM('mHist')">닫기</button></div>
+</div></div>
+
+<!-- 안내 모달 -->
+<div class="mdim" id="mGuide"><div class="modal" style="width:640px">
+  <div class="mh">안내보기 · 졸업사정 <span style="cursor:pointer" onclick="closeM('mGuide')">✕</span></div>
+  <div class="mb" style="line-height:1.7">
+    <b>1. 대상자 → 성적표</b> — 졸업대상자관리에서 생성된 대상자가 좌측에 나옵니다. 학생을 클릭하면 별도 메뉴(졸업사정용성적표 출력)로 이동하지 않고 우측에서 바로 사정용 성적표를 확인·출력합니다.<br>
+    <b>2. 교과목구분 상이</b> — 성적에 기록된 이수구분과 <b>학생의 교육과정 적용년도</b> 기준 이수구분이 다른 과목을 자동으로 찾아 <span class="badge bg-e">▲</span>로 표시합니다. (휴학·재입학·교육과정 개편 시 주로 발생)<br>
+    <b>3. 처리 방법</b><br>
+    &nbsp;· 개별: 「이수과목·교과목구분」 탭에서 과목별 변경 → 저장<br>
+    &nbsp;· 일괄: 「교과목구분 일괄변경」에서 교과목 단위로 묶어 여러 학생에게 한 번에 적용. 적용 전 졸업가능 영향(N→Y)을 미리 봅니다.<br>
+    <b>4. 반영 대상</b> — 기본은 사정용 이수구분만 바꾸고 성적원장은 유지합니다. 성적원장 변경은 성적 담당 승인 절차와 연계하도록 설계했습니다.<br>
+    <b>5. 이력·원복</b> — 모든 변경은 처리번호 단위로 이력이 남고 처리번호 전체 또는 건별로 원복할 수 있습니다. 원복 후에는 재사정합니다.
+  </div>
+  <div class="mf"><span style="margin-left:auto"></span><button class="b pri" onclick="closeM('mGuide')">닫기</button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+<div class="demo">설계 데모 · 가상의 학생·성적 데이터</div>
+
+<script>
+/* ═════════ 교육과정 (산업공학과) ═════════
+   dv: {적용시작년도: 이수구분} — 교육과정 개편 이력 */
+const DIVS=['교양필수','교양선택','기초교양','전공기초','전공필수','전공선택','일반선택'];
+const C=[
+ // 교양필수
+ ['ZE1000053','실용영어(Ⅰ)',1,1,1,{2015:'교양필수'}],['ZE1000054','실용영어(Ⅱ)',1,1,2,{2015:'교양필수'}],
+ ['ZE1000063','실용컴퓨터(Ⅰ)',1,1,1,{2015:'교양필수'}],['ZE1000064','실용컴퓨터(Ⅱ)',1,1,2,{2015:'교양필수'}],
+ ['ZF1100902','고급영문독해',3,2,1,{2015:'교양필수'}],
+ ['ZE1000043','공학작문및발표',3,2,2,{2015:'교양선택',2021:'교양필수'}],
+ // 기초교양
+ ['ZB1000011','공학수학기초',3,1,1,{2015:'기초교양'}],
+ // 전공기초
+ ['AE1500083','공학개론',3,1,1,{2015:'전공기초'}],['AE1500379','공학미적분학(Ⅰ)',3,1,1,{2015:'전공기초'}],
+ ['AE1500570','공학선형대수학',3,1,2,{2015:'전공기초'}],['AE1500624','공학역학',3,1,2,{2015:'전공기초',2022:'일반선택'}],
+ ['AE1500214','일반물리학(Ⅰ)',3,1,1,{2015:'전공기초'}],['AE1500215','일반물리학(Ⅱ)',3,1,2,{2015:'전공기초'}],
+ ['AE1500039','일반물리학실험(Ⅰ)',1,1,1,{2015:'전공기초'}],['AE1500222','일반물리학실험(Ⅱ)',1,1,2,{2015:'전공기초'}],
+ ['IE2900175','자료구조론',3,2,1,{2015:'전공기초'}],['AE1500239','컴퓨터공학개론',1,1,1,{2015:'전공기초'}],['AE1500240','컴퓨터프로그래밍',1,1,2,{2015:'전공기초'}],
+ // 전공필수
+ ['IE2400216','경영과학(Ⅰ)',3,2,2,{2015:'전공필수'}],['IE2400217','경영과학(Ⅱ)[영어]',3,3,1,{2015:'전공필수'}],
+ ['IE2700565','공급사슬관리',3,3,2,{2015:'전공필수'}],['AE2700603','공업계도(Ⅰ)',1,1,2,{2015:'전공필수'}],
+ ['IE1500576','공학미분방정식',3,2,1,{2015:'전공필수'}],['IE2400210','공학통계(Ⅰ)[영어]',3,2,1,{2015:'전공필수'}],
+ ['IE2400211','공학통계(Ⅱ)[영어]',3,2,2,{2015:'전공필수'}],
+ ['IE2900193','산업공학설계입문',2,1,2,{2015:'전공선택',2022:'전공필수'}],
+ ['IE2700609','시설계획및설계',3,3,1,{2015:'전공필수',2024:'전공선택'}],
+ ['IE2900176','이산수학',3,2,1,{2015:'전공필수'}],['IE2600377','제조공학및실습',3,3,1,{2015:'전공필수'}],
+ ['IE3100740','종합설계프로젝트',3,4,1,{2015:'전공필수'}],['IE2700637','품질관리론',3,3,2,{2015:'전공필수'}],
+ ['IE2200359','확률론',3,2,1,{2015:'전공필수'}],
+ ['IE2400219','공학경영',3,3,2,{2015:'전공선택',2022:'전공필수'}]
+].map(r=>({code:r[0],name:r[1],cr:r[2],lv:r[3],sm:r[4],dv:r[5]}));
+const MAJ_POOL=[['IE2400220','경제성공학및원가분석',2,2],['IE3200101','생산계획및통제',3,1],['IE3200105','최적화이론',3,1],['IE3200102','인간공학',3,2],
+ ['IE3200103','시뮬레이션',3,2],['IE3200110','생산자동화',3,2],['IE3200104','데이터마이닝',4,1],['IE3200106','물류관리',4,1],['IE3200109','프로젝트관리',4,1],
+ ['IE3200112','품질경영',4,1],['IE3200114','스마트팩토리',4,1],['IE3200107','서비스공학',4,2],['IE3200108','금융공학',4,2],['IE3200111','인공지능과산업응용',4,2],
+ ['IE3200113','신뢰성공학',4,2],['IE3200115','공정관리',4,2]].map(r=>({code:r[0],name:r[1],cr:3,lv:r[2],sm:r[3],dv:{2015:'전공선택'}}));
+const GS_POOL=[['ZF1100275','문화로보는서양의역사',1],['ZF1100112','생활과경제',2],['ZF1100777','현대사회와미디어',2],['ZF1100349','불교예술과미의식',3],
+ ['ZF1100180','영화의이해',3],['ZF1200410','생활속의화학',4],['ZF1200533','과학기술과사회',4],['ZF1100236','일어(Ⅰ)',6],['ZF1100251','한문(Ⅰ)',6],
+ ['ZF1100539','공학윤리',7],['ZF1100612','창의적사고와문제해결',7],['ZF1100390','서양미술의이해',3]].map((r,i)=>({code:r[0],name:r[1],cr:3,lv:1+(i%2),sm:1+((i>>1)%2),area:r[2],dv:{2015:'교양선택'}}));
+const GEN_POOL=[['LA2800075','노동법(Ⅰ)',2,1],['SO2100716','미래사회학',2,2],['HR1100756','리더십개발과훈련',1,2]].map(r=>({code:r[0],name:r[1],cr:3,lv:r[2],sm:r[3],dv:{2015:'일반선택'}}));
+const AREA_NM={1:'사상과역사',2:'사회와문화',3:'문학과예술',4:'과학과기술',5:'건강과레포츠',6:'외국어',7:'융복합',8:'효원브릿지'};
+const ALLC=[...C,...MAJ_POOL,...GS_POOL,...GEN_POOL]; const CM={}; ALLC.forEach(c=>CM[c.code]=c);
+function divAt(code,y){ const d=CM[code].dv; let v=null; Object.keys(d).map(Number).sort((a,b)=>a-b).forEach(k=>{ if(k<=y||v===null) v=d[k]; }); return v; }
+
+/* 사정기준 (졸업사정기준통합관리에서 확정된 값을 적용년도별로 조회한다고 가정) */
+function crit(y){
+  const s=div=>C.filter(c=>divAt(c.code,y)===div).reduce((a,c)=>a+c.cr,0);
+  return {교양필수:s('교양필수'),교양선택:y<=2020?15:12,기초교양:3,전공기초:s('전공기초'),전공필수:s('전공필수'),심화전공:45,일반선택:6,총이수:137,평점:2.0,영역수:3,필수영역:[4],
+          필수과목:C.filter(c=>divAt(c.code,y)==='전공필수').map(c=>c.code)};
+}
+
+/* ═════════ 가상 대상자 ═════════ */
+const DEF=[ // 학번, 성명, 적용년도, 군휴학(년), 재입학, 전공선택 수, 교양선택 풀 index, 어학, 학적신청
+ ['202027501','김가온',2020,2,0,14,[0,1,5,9],'Y','심화과정'],
+ ['202027508','이도윤',2020,2,0,14,[0,3,6,10],'Y','주전공'],
+ ['202027514','박서진',2020,0,0,13,[1,4,5,7],'Y','심화과정'],
+ ['202027523','오세린',2020,0,0,14,[0,6,4,9],'Y','심화과정'],
+ ['202027530','신우진',2020,0,0,14,[0,1,2,3],'Y','주전공'],
+ ['202127504','최하람',2021,2,0,13,[0,2,5,10],'Y','주전공'],
+ ['202127511','정유나',2021,0,0,13,[1,3,6,9],'Y','심화과정'],
+ ['202127517','조은호',2021,0,0,13,[0,1,3,10],'N','주전공'],
+ ['202127522','한지율',2021,0,0,13,[1,5,7,9],'Y','심화과정'],
+ ['202127529','임태오',2021,2,0,12,[0,1,5,9],'Y','주전공'],
+ ['202127535','배나래',2021,0,0,14,[2,5,7,10],'Y','심화과정'],
+ ['202227502','강민재',2022,0,1,14,[0,1,5,10],'Y','주전공'],
+ ['202227513','윤채원',2022,0,0,14,[2,4,6,8],'Y','심화과정'],
+ ['202227520','서다인',2022,0,0,14,[0,5,6,11],'Y','주전공']
+];
+const GR=['A+','A+','A0','A0','B+','B+','B0','B0','C+','C0'], GP={'A+':4.5,'A0':4,'B+':3.5,'B0':3,'C+':2.5,'C0':2,'D+':1.5,'D0':1,'F':0};
+function rng(seed){ let s=seed; return ()=>{ s=(s*16807)%2147483647; return s/2147483647; }; }
+function termOf(st,c){
+  let y; if(st.readmit) y = c.lv<=2 ? 2018+c.lv : 2022+c.lv; else y = st.y + c.lv - 1 + (c.lv>=3?st.gap:0);
+  return {ty:y, tm:c.sm};
+}
+const STU=DEF.map((d,i)=>{
+  const st={id:d[0],name:d[1],y:d[2],gap:d[3],readmit:!!d[4],lang:d[7],hj:d[8],rows:[],pass:null,assessAt:'2026-08-05 17:35:12'};
+  const R=rng(9173+i*101);
+  const pick=[...C, ...MAJ_POOL.slice(0,d[5]), ...d[6].map(k=>GS_POOL[k]), ...GEN_POOL.slice(0,2)];
+  pick.forEach(c=>{ const t=termOf(st,c); const div=divAt(c.code,t.ty);
+    st.rows.push({code:c.code,ty:t.ty,tm:t.tm,grade:GR[Math.floor(R()*GR.length)],rec:div,orig:div}); });
+  st.rows.sort((a,b)=>a.ty-b.ty||a.tm-b.tm);
+  st.sem=new Set(st.rows.map(r=>r.ty*10+r.tm)).size;
+  return st;
+});
+let HIST=[]; let selIdx=0; let pending={}; let batchSeq=1;
+const $=id=>document.getElementById(id);
+
+/* ═════════ 사정 로직 ═════════ */
+function curDiv(st,r){ return divAt(r.code,st.y); }
+function mismatches(st){ return st.rows.filter(r=>r.rec!==curDiv(st,r)); }
+function assess(st,override){ // override: {code:div}
+  const k=crit(st.y), sum={}; DIVS.forEach(d=>sum[d]=0);
+  let gpS=0,gpC=0,tot=0; const areas=new Set(); const mustTaken={};
+  st.rows.forEach(r=>{ const div=(override&&override[r.code])||r.rec; if(r.grade==='F') return;
+    sum[div]+=CM[r.code].cr; tot+=CM[r.code].cr; gpS+=GP[r.grade]*CM[r.code].cr; gpC+=CM[r.code].cr;
+    if(div==='교양선택'&&CM[r.code].area) areas.add(CM[r.code].area);
+    if(div==='전공필수') mustTaken[r.code]=1; });
+  const gpa=gpC?gpS/gpC:0; const deep=Math.max(0,sum['전공필수']-k.전공필수)+sum['전공선택'];
+  const missMust=k.필수과목.filter(c=>!mustTaken[c]);
+  const missArea=k.필수영역.filter(a=>!areas.has(a));
+  const items=[
+    ['교양필수',k.교양필수,sum['교양필수']],['교양선택',k.교양선택,sum['교양선택']],['기초교양',k.기초교양,sum['기초교양']],
+    ['전공기초',k.전공기초,sum['전공기초']],['전공필수',k.전공필수,sum['전공필수']],['전공선택',0,sum['전공선택']],
+    ['심화전공(전필,전선 남는학점)',k.심화전공,deep],['일반선택',k.일반선택,sum['일반선택']],['총이수학점',k.총이수,tot]
+  ].map(([n,req,got])=>({n,req,got,ok:got>=req}));
+  items.push({n:'졸업기준평점평균',req:k.평점.toFixed(2),got:gpa.toFixed(2),ok:gpa>=k.평점});
+  const reqs=[
+    {n:'교양선택 영역 ('+k.영역수+'개 이상)',txt:[...areas].sort().map(a=>a+'영역').join(', ')||'없음',ok:areas.size>=k.영역수},
+    {n:'교양선택 필수영역',txt:k.필수영역.map(a=>a+'영역 '+AREA_NM[a]).join(', ')+(missArea.length?' 미이수':' 이수'),ok:!missArea.length},
+    {n:'전공필수 지정과목',txt:missMust.length?missMust.map(c=>CM[c].name).join(', ')+' 미이수(전공필수로 미인정)':'모두 이수',ok:!missMust.length},
+    {n:'표준외국어능력시험',txt:st.lang==='Y'?'TOEIC 750점 이상 충족':'미응시',ok:st.lang==='Y'}
+  ];
+  const credOk=items.every(x=>x.ok), reqOk=reqs.every(x=>x.ok);
+  return {items,reqs,sum,tot,gpa,gpS,gpC,areas,credOk,reqOk,pass:credOk&&reqOk,k};
+}
+function allCurOverride(st){ const o={}; mismatches(st).forEach(r=>o[r.code]=curDiv(st,r)); return o; }
+function impactOf(st){ const m=mismatches(st); if(!m.length) return 'none'; const a=assess(st).pass,b=assess(st,allCurOverride(st)).pass; return a!==b?(b?'up':'down'):'same'; }
+function runAssess(showToast){ STU.forEach(s=>{s.res=assess(s); if(showToast) s.assessAt=now();}); renderAll(); if(showToast) toast('졸업사정을 실행했습니다. ('+STU.length+'명)'); }
+
+/* ═════════ 렌더: 목록 ═════════ */
+function filtered(){
+  const fp=$('fPass').value,fm=$('fMis').value,key=$('fKey').value.trim();
+  return STU.map((s,i)=>({s,i})).filter(({s})=>{
+    if(fp&&(s.res.pass?'Y':'N')!==fp) return false;
+    const n=mismatches(s).length, im=impactOf(s);
+    if(fm==='Y'&&!n) return false; if(fm==='N'&&n) return false; if(fm==='I'&&im!=='up') return false;
+    if(key&&!(s.id.includes(key)||s.name.includes(key))) return false; return true; });
+}
+function renderList(){
+  const L=filtered();
+  $('tList').tBodies[0].innerHTML=L.map(({s,i})=>{ const n=mismatches(s).length, im=impactOf(s);
+    return `<tr class="${i===selIdx?'sel':''}" onclick="pick(${i})">
+      <td class="c" onclick="event.stopPropagation()"><input type="checkbox" class="lchk" data-i="${i}" ${s.chk?'checked':''} onchange="STU[${i}].chk=this.checked"></td>
+      <td class="c">${s.id}</td><td class="c">${s.name}</td><td class="c">${s.sem}</td><td class="c">${s.y}</td>
+      <td class="c ${s.res.credOk&&s.res.reqOk?'':'yn-N'}">${s.res.reqOk?'Y':'N'}</td><td class="c ${s.res.pass?'':'yn-N'}">${s.res.pass?'Y':'N'}</td>
+      <td class="c">${s.hj}</td>
+      <td class="c">${n?`<span class="badge ${im==='up'?'bg-e':'bg-w'}" title="${im==='up'?'교육과정 기준 적용 시 졸업가능 N→Y':'졸업가능 영향 없음'}">▲ ${n}${im==='up'?' · 영향':''}</span>`:'<span class="muted">—</span>'}</td></tr>`; }).join('')
+    || '<tr><td colspan="9" class="c muted" style="height:80px">조회된 데이터가 없습니다.</td></tr>';
+  $('lCnt').textContent=L.length;
+  const y=STU.filter(s=>s.res.pass).length, mi=STU.filter(s=>mismatches(s).length).length;
+  $('lSum').innerHTML=`졸업가능 <b style="color:var(--ok)">${y}</b> · 불가 <b style="color:var(--err)">${STU.length-y}</b> · 구분상이 <b style="color:var(--warn)">${mi}</b>명`;
+}
+function checkAll(v){ filtered().forEach(({s})=>s.chk=v); renderList(); }
+function pick(i){ selIdx=i; pending={}; renderAll(); }
+
+/* ═════════ 렌더: 학생 헤더 ═════════ */
+function renderHead(){
+  const s=STU[selIdx], r=s.res, m=mismatches(s), im=impactOf(s);
+  $('stuHead').innerHTML=`<span class="nm">${s.name}</span>
+   <span class="kv">학번 <b>${s.id}</b></span><span class="kv">공과대학 <b>산업공학과</b></span>
+   <span class="kv">교육과정적용 <b>${s.y}</b>${s.readmit?' <span class="badge bg-b">재입학</span>':''}${s.gap?' <span class="badge bg-g">휴학 '+s.gap+'년</span>':''}</span>
+   <span class="kv">이수학기 <b>${s.sem}</b></span><span class="kv">취득 <b>${r.tot}</b>학점</span><span class="kv">평점 <b>${r.gpa.toFixed(2)}</b></span>
+   <span class="res"><span class="muted">사정일자 ${s.assessAt}</span>졸업가능 <span class="badge ${r.pass?'bg-ok':'bg-e'}" style="font-size:12.5px">${r.pass?'Y':'N'}</span></span>`;
+  $('stuAlert').innerHTML = m.length
+    ? `<div class="alert"><b style="color:var(--err)">▲ 교과목구분 상이 ${m.length}건</b>
+        <span class="grow">${s.y} 교육과정 기준과 성적 이수구분이 다릅니다. ${im==='up'?'<b>교육과정 기준으로 변경하면 졸업가능 N → Y</b>':im==='down'?'<b>변경 시 졸업가능 Y → N 주의</b>':'변경해도 졸업가능 여부는 동일합니다.'}</span>
+        <button class="b s" onclick="showTab('p2');$('onlyMis').classList.add('on');renderCourses()">상이 과목 보기</button>
+        <button class="b s org" onclick="applyStudentAll()">이 학생 일괄 적용</button></div>`
+    : `<div class="alert okk"><span class="grow">교과목구분 상이 없음 — 성적 이수구분이 ${s.y} 교육과정과 일치합니다.</span></div>`;
+  $('misBadge').textContent=m.length; $('misBadge').className='badge '+(m.length?'bg-e':'bg-g');
+  const hc=HIST.filter(h=>h.sid===s.id).length; $('histBadge').textContent=hc;
+}
+
+/* ═════════ 렌더: 졸업사정용 성적표 ═════════ */
+function renderPaper(){
+  const s=STU[selIdx], r=s.res, hl=$('hl').checked;
+  const groups=DIVS.map(d=>({d,rows:s.rows.filter(x=>x.rec===d)})).filter(g=>g.rows.length);
+  // 3단 배분 (행 수 기준)
+  const total=groups.reduce((a,g)=>a+g.rows.length+1,0)+6, per=Math.ceil(total/3); const cols=[[],[],[]]; let ci=0,cnt=6;
+  groups.forEach(g=>{ if(cnt+g.rows.length>per*1.08&&ci<2&&cnt>0){ci++;cnt=0;} cols[ci].push(g); cnt+=g.rows.length+1; });
+  const row=x=>{ const c=CM[x.code], cd=curDiv(s,x), mis=hl&&x.rec!==cd, chg=hl&&x.rec!==x.orig;
+    return `<div class="prow ${mis?'mis':chg?'chg':''}" ${mis||chg?`onclick="showTab('p2');focusRow('${x.code}')" title="${mis?s.y+' 교육과정: '+cd:'변경 전: '+x.orig}"`:''}>
+      <span>${x.rec}</span><span>${x.code}</span><span>${mis?'<span class="mk">▲</span>':chg?'<span class="mk">*</span>':''}${c.name}</span><span>${x.ty}/${x.tm}0</span><span class="r">${c.cr.toFixed(1)}</span><span class="c">${x.grade}</span></div>`; };
+  const colHtml=(gs,first)=>`<div class="pcol"><div class="phd"><span>이수구분</span><span>코드</span><span>교과목명</span><span></span><span class="r">학점</span><span class="c">성적</span></div>
+    ${first?`<div class="pinfo"><b>학적신청내역</b>${s.hj==='심화과정'?'심화과정 (산업공학과)':'주전공 (산업공학과)'}</div>
+    <div class="pinfo"><b>학적변동내역(전과, 재입학, 편입학, 수료, 학사학위취득유예)</b>${s.readmit?'2024 10 재입학 (2024.02.20) · 교육과정 2022 적용':s.gap?`${s.y+2} 10 휴학(군) ${s.gap}년`:'—'}</div>`:''}
+    ${gs.map(g=>`<div class="pgrp">${g.rows.map(row).join('')}</div>`).join('')}</div>`;
+  const cat=(ds)=>{ let a=0,g=0,p=0; s.rows.filter(x=>ds.includes(x.rec)).forEach(x=>{const c=CM[x.code].cr;a+=c;if(x.grade!=='F'){g+=c;p+=GP[x.grade]*c;}}); return {a,g,p,avg:g?p/g:0}; };
+  const F=[['교양공통',['교양필수']],['교양선택',['교양선택','기초교양']],['기초필수',['전공기초']],['전공필수',['전공필수']],['전공선택',['전공선택']],['자유(일반)선택',['일반선택']],['복수전공',[]],['부전공',[]],['연계전공',[]]].map(([n,d])=>({n,...cat(d)}));
+  const f=v=>v?v.toFixed(1):'', f2=v=>v?v.toFixed(2):'';
+  $('paper').innerHTML=`<h2>2026학년도 1학기 졸업사정용 성적표</h2>
+   <div class="ph"><span>학번 : ${s.id}</span><span>성명 : ${s.name}</span><span>교육과정적용년도 : ${s.y}</span><span class="rt">출력일자 : ${today()}</span>
+     <span>대학 : 공과대학</span><span>학과 : 산업공학과</span><span></span><span class="rt">PAGE : 1</span></div>
+   <div class="pcols">${cols.map((g,i)=>colHtml(g,i===0)).join('')}</div>
+   <div class="pfoot"><table><tr><th></th>${F.map(x=>`<th>${x.n}</th>`).join('')}</tr>
+     <tr><td>신청학점</td>${F.map(x=>`<td>${f(x.a)}</td>`).join('')}</tr><tr><td>취득학점</td>${F.map(x=>`<td>${f(x.g)}</td>`).join('')}</tr>
+     <tr><td>평점계</td>${F.map(x=>`<td>${f2(x.p)}</td>`).join('')}</tr><tr><td>평점평균</td>${F.map(x=>`<td>${f2(x.avg)}</td>`).join('')}</tr></table>
+     <div class="nt">* 교양공통 : 교양필수, 정보화소양 포함<br>* 기초필수 : 전공기초 포함<br>* 교양선택 : 일반/핵심/기초교양 포함<br>* 자유선택 : 일반선택 포함<br>* 예비사정 시 수강내역 포함하지 않음.</div>
+     <div class="tt">총신청학점 : ${r.tot.toFixed(1)}<br>총취득학점 : ${r.tot.toFixed(1)}<br>총평점계 : ${r.gpS.toFixed(2)}<br>총평점평균 : ${r.gpa.toFixed(2)}</div></div>
+   ${hl?`<div class="legend"><span><i style="background:#ffe3e6;outline:1px solid #f39aa4"></i>▲ 교과목구분 상이 (${s.y} 교육과정과 다름) — 클릭 시 변경 화면</span><span><i style="background:#e3eeff"></i>* 이수구분 변경됨</span><span class="muted">※ 표시는 화면 전용이며 출력물에는 인쇄되지 않습니다.</span></div>`:''}`;
+}
+
+/* ═════════ 렌더: 이수과목·교과목구분 ═════════ */
+function renderCourses(){
+  const s=STU[selIdx], only=$('onlyMis').classList.contains('on'); $('cyLbl').textContent=s.y;
+  const rows=s.rows.filter(r=>!only||r.rec!==curDiv(s,r)||r.rec!==r.orig||pending[r.code]);
+  $('tCourse').tBodies[0].innerHTML=rows.map(r=>{ const c=CM[r.code], cd=curDiv(s,r), val=pending[r.code]||r.rec, mis=val!==cd, chg=val!==r.orig||pending[r.code];
+    return `<tr id="cr_${r.code}" class="${mis?'mis':chg?'chg':''}">
+      <td class="c"><input type="checkbox" data-code="${r.code}" ${mis?'':''}></td>
+      <td class="c">${pending[r.code]?'<span class="badge bg-b">수정</span>':mis?'<span class="badge bg-e">▲상이</span>':r.rec!==r.orig?'<span class="badge bg-b">변경됨</span>':'<span class="muted">일치</span>'}</td>
+      <td class="c">${r.code}</td><td>${c.name}</td><td class="c">${c.cr}</td><td class="c">${r.ty}/${r.tm}0</td><td class="c">${r.grade}</td>
+      <td><select onchange="setPending('${r.code}',this.value)">${DIVS.map(d=>`<option ${d===val?'selected':''}>${d}</option>`).join('')}</select></td>
+      <td class="c" style="${mis?'color:var(--err);font-weight:700':''}">${cd}</td><td class="c">${c.area?c.area+'영역':''}</td></tr>`; }).join('')
+    || '<tr><td colspan="10" class="c muted" style="height:60px">상이 과목이 없습니다.</td></tr>';
+}
+function setPending(code,v){ const s=STU[selIdx], r=s.rows.find(x=>x.code===code); if(v===r.rec) delete pending[code]; else pending[code]=v; renderCourses(); }
+function applyCurToSelected(){ const s=STU[selIdx]; let n=0;
+  document.querySelectorAll('#tCourse tbody input[type=checkbox]:checked').forEach(cb=>{ const r=s.rows.find(x=>x.code===cb.dataset.code); const cd=curDiv(s,r); if(cd!==r.rec){pending[r.code]=cd;n++;} });
+  renderCourses(); toast(n?n+'건을 교육과정 기준으로 설정했습니다. 저장하세요.':'교육과정과 다른 선택 과목이 없습니다.'); }
+function saveManual(){ const codes=Object.keys(pending); if(!codes.length) return toast('변경된 내용이 없습니다.');
+  const reason=prompt('변경사유를 입력하세요.','교육과정 기준 이수구분 적용'); if(!reason) return;
+  const s=STU[selIdx], bno=newBatch(); codes.forEach(code=>{ const r=s.rows.find(x=>x.code===code); logChange(bno,s,r,pending[code],reason,'개별'); r.rec=pending[code]; });
+  pending={}; s.res=assess(s); s.assessAt=now(); renderAll(); toast(`${codes.length}건 저장 · 재사정 완료 (졸업가능 ${s.res.pass?'Y':'N'})`); }
+function focusRow(code){ renderCourses(); const el=$('cr_'+code); if(el){ el.classList.add('sel'); el.scrollIntoView({block:'center'}); } }
+function applyStudentAll(){ const s=STU[selIdx], m=mismatches(s); if(!m.length) return;
+  if(!confirm(`${s.name} 학생의 교과목구분 상이 ${m.length}건을 ${s.y} 교육과정 기준으로 변경하고 재사정합니다.`)) return;
+  const before=s.res.pass, bno=newBatch(); m.forEach(r=>{ const cd=curDiv(s,r); logChange(bno,s,r,cd,'교육과정 기준 이수구분 적용','학생단위'); r.rec=cd; });
+  s.res=assess(s); s.assessAt=now(); renderAll(); toast(`${m.length}건 변경 · 졸업가능 ${before?'Y':'N'} → ${s.res.pass?'Y':'N'}`); }
+
+/* ═════════ 렌더: 사정결과 ═════════ */
+function renderResult(){
+  const s=STU[selIdx], r=s.res, m=mismatches(s), p=m.length?assess(s,allCurOverride(s)):null;
+  const cell=(x,px)=>`<td class="r">${x.got}${px&&String(px.got)!==String(x.got)?` <span class="muted">→ ${px.got}</span>`:''}</td>`;
+  $('resBody').innerHTML=`
+   <div class="sub">이수구분별 학점 <span class="muted">(${s.y} 교육과정 사정기준 · 졸업사정기준통합관리 확정본)</span></div>
+   <table class="g"><colgroup><col><col style="width:80px"><col style="width:120px"><col style="width:70px"><col style="width:70px"></colgroup>
+    <thead><tr><th>사정기준구분</th><th>기준</th><th>취득${p?' <span class="muted">(→ 변경 시)</span>':''}</th><th>차이</th><th>결과</th></tr></thead><tbody>
+    ${r.items.map((x,i)=>`<tr><td>${x.n}</td><td class="r">${x.req}</td>${cell(x,p&&p.items[i])}<td class="r ${x.ok?'':'yn-N'}">${typeof x.got==='number'?(x.got-x.req>0?'+':'')+(x.got-x.req):''}</td>
+      <td class="c">${x.ok?'<span class="badge bg-ok">충족</span>':'<span class="badge bg-e">미충족</span>'}${p&&p.items[i].ok!==x.ok?' <span class="badge bg-b">→ '+(p.items[i].ok?'충족':'미충족')+'</span>':''}</td></tr>`).join('')}</tbody></table>
+   <div class="sub">졸업요건</div>
+   <table class="g"><colgroup><col style="width:180px"><col><col style="width:100px"></colgroup><thead><tr><th>요건</th><th>내역</th><th>결과</th></tr></thead><tbody>
+    ${r.reqs.map((x,i)=>`<tr><td>${x.n}</td><td style="white-space:normal">${x.txt}</td><td class="c">${x.ok?'<span class="badge bg-ok">충족</span>':'<span class="badge bg-e">미충족</span>'}${p&&p.reqs[i].ok!==x.ok?' <span class="badge bg-b">→ '+(p.reqs[i].ok?'충족':'미충족')+'</span>':''}</td></tr>`).join('')}</tbody></table>
+   ${p?`<div class="proj">🔎 <b>교육과정 기준 적용 시 예상</b> — 상이 ${m.length}건(${m.map(x=>CM[x.code].name+' '+x.rec+'→'+curDiv(s,x)).join(', ')})을 변경하면
+      졸업가능 <b>${r.pass?'Y':'N'} → <span style="color:${p.pass?'var(--ok)':'var(--err)'}">${p.pass?'Y':'N'}</span></b>${!p.pass?' <span class="muted">(다른 미충족 항목이 남아 있음)</span>':''}
+      <button class="b s org" style="margin-left:6px" onclick="applyStudentAll()">이 학생 일괄 적용</button></div>`:''}
+   <div class="muted" style="margin-top:8px">※ 기준값은 졸업사정기준통합관리의 확정본을 교육과정 적용년도별로 조회합니다. (데모에서는 교육과정 편성표로 계산)</div>`;
+}
+
+/* ═════════ 변경이력 ═════════ */
+function newBatch(){ const d=today().replace(/[^0-9]/g,'').slice(0,8); return `B-${d}-${String(batchSeq++).padStart(2,'0')}`; }
+function logChange(bno,s,r,to,reason,kind){ HIST.unshift({bno,at:now(),sid:s.id,name:s.name,code:r.code,from:r.rec,to,reason,kind,who:'김정목',undone:false}); }
+function renderHist(){
+  const s=STU[selIdx], L=HIST.filter(h=>h.sid===s.id);
+  $('tHist').tBodies[0].innerHTML=L.map(h=>`<tr style="${h.undone?'color:#aaa;text-decoration:line-through':''}"><td class="c">${h.at}</td><td class="c">${h.bno}</td><td>${h.code} ${CM[h.code].name}</td>
+    <td class="c">${h.from}<span class="arrow">→</span><b>${h.to}</b></td><td>${h.reason} <span class="muted">(${h.kind})</span></td><td class="c">${h.who}</td>
+    <td class="c">${h.undone?'원복됨':`<button class="b s red" onclick="undoOne('${h.bno}','${h.sid}','${h.code}')">원복</button>`}</td></tr>`).join('')
+    || '<tr><td colspan="7" class="c muted" style="height:60px">변경이력이 없습니다.</td></tr>';
+}
+function undoOne(bno,sid,code){ const h=HIST.find(x=>x.bno===bno&&x.sid===sid&&x.code===code&&!x.undone); if(!h) return;
+  const s=STU.find(x=>x.id===sid), r=s.rows.find(x=>x.code===code); r.rec=h.from; h.undone=true; s.res=assess(s); s.assessAt=now(); renderAll(); if($('mHist').classList.contains('on')) renderHistAll(); toast('원복 후 재사정했습니다.'); }
+function undoBatch(bno){ const L=HIST.filter(h=>h.bno===bno&&!h.undone); if(!confirm(`${bno} (${L.length}건)을 원복하고 재사정합니다.`)) return;
+  L.forEach(h=>undoOne(h.bno,h.sid,h.code)); toast(bno+' 원복 완료'); }
+function openHist(){ renderHistAll(); openM('mHist'); }
+function renderHistAll(){
+  const B={}; HIST.forEach(h=>{ (B[h.bno]=B[h.bno]||{bno:h.bno,at:h.at,reason:h.reason,kind:h.kind,who:h.who,n:0,live:0,names:new Set(),courses:new Set()}); const b=B[h.bno]; b.n++; if(!h.undone)b.live++; b.names.add(h.name); b.courses.add(CM[h.code].name); });
+  $('tHistAll').tBodies[0].innerHTML=Object.values(B).map(b=>`<tr><td class="c">${b.bno}</td><td class="c">${b.at}</td>
+    <td class="names">${b.reason} <span class="muted">(${b.kind})</span><br>${[...b.courses].join(', ')} · ${b.names.size}명</td><td class="c">${b.n}</td><td class="c">${b.who}</td>
+    <td class="c">${b.live?`<button class="b s red" onclick="undoBatch('${b.bno}')">원복</button>`:'<span class="muted">원복됨</span>'}</td></tr>`).join('')
+    || '<tr><td colspan="6" class="c muted" style="height:60px">변경이력이 없습니다.</td></tr>';
+}
+
+/* ═════════ 일괄변경 ═════════ */
+let BG=[];
+function bulkScope(){ const v=document.querySelector('input[name=bs]:checked').value; return v==='CHK'?STU.filter(s=>s.chk):filtered().map(x=>x.s); }
+function openBulk(){ $('bsAll').textContent=filtered().length; $('bsChk').textContent=STU.filter(s=>s.chk).length; $('bReason').value=''; $('bMemo').value=''; BG=[]; renderBulk(true); openM('mBulk'); }
+function renderBulk(reset){
+  const scope=bulkScope(), map={};
+  scope.forEach(s=>mismatches(s).forEach(r=>{ const cd=curDiv(s,r), key=[s.y,r.code,r.rec,cd].join('|');
+    (map[key]=map[key]||{key,y:s.y,code:r.code,from:r.rec,to:cd,stu:[]}).stu.push(s); }));
+  const prev={}; BG.forEach(g=>prev[g.key]=g);
+  BG=Object.values(map).sort((a,b)=>a.y-b.y||a.code.localeCompare(b.code)).map(g=>{
+    g.chk = prev[g.key]?prev[g.key].chk:true; g.target = prev[g.key]?prev[g.key].target:g.to;
+    g.up = g.stu.filter(s=>{ const o={}; o[g.code]=g.target; return !assess(s).pass && assess(s,o).pass; }).length;
+    g.down = g.stu.filter(s=>{ const o={}; o[g.code]=g.target; return assess(s).pass && !assess(s,o).pass; }).length; return g; });
+  const only=$('bImp').checked, show=BG.filter(g=>!only||g.up||g.down);
+  $('tBulk').tBodies[0].innerHTML=show.map(g=>{ const i=BG.indexOf(g), c=CM[g.code]; return `<tr>
+    <td class="c"><input type="checkbox" ${g.chk?'checked':''} onchange="BG[${i}].chk=this.checked;bulkImpact()"></td>
+    <td class="c">${g.y}</td><td class="c">${g.code}</td><td>${c.name}</td><td class="c">${c.cr}</td>
+    <td><div style="display:flex;align-items:center;gap:2px"><span class="badge bg-g">${g.from}</span><span class="arrow">→</span>
+      <select style="flex:1" onchange="BG[${i}].target=this.value;renderBulk()">${DIVS.map(d=>`<option ${d===g.target?'selected':''}>${d}${d===g.to?' (교육과정)':''}</option>`).join('')}</select></div></td>
+    <td class="c"><b>${g.stu.length}</b></td>
+    <td class="c">${g.up?`<span class="badge bg-ok">N→Y ${g.up}명</span>`:''}${g.down?`<span class="badge bg-e">Y→N ${g.down}명</span>`:''}${!g.up&&!g.down?'<span class="muted">영향 없음</span>':''}</td>
+    <td class="c"><span class="muted" style="cursor:help" title="${g.stu.map(s=>s.id+' '+s.name).join('\n')}">${g.stu.length}명 ⓘ</span></td></tr>`; }).join('')
+    || '<tr><td colspan="9" class="c muted" style="height:80px">대상자 중 교과목구분이 상이한 과목이 없습니다.</td></tr>';
+  $('bAll').checked=BG.length&&BG.every(g=>g.chk); bulkImpact();
+}
+function bulkAll(v){ BG.forEach(g=>g.chk=v); renderBulk(); }
+function bulkImpact(){
+  const sel=BG.filter(g=>g.chk), cnt=sel.reduce((a,g)=>a+g.stu.length,0), studs=new Set(); sel.forEach(g=>g.stu.forEach(s=>studs.add(s)));
+  let up=0,down=0; studs.forEach(s=>{ const o={}; sel.filter(g=>g.stu.includes(s)).forEach(g=>o[g.code]=g.target); const a=assess(s).pass,b=assess(s,o).pass; if(!a&&b)up++; if(a&&!b)down++; });
+  $('bImpact').innerHTML=`선택 ${sel.length}개 교과목 · <b>${cnt}</b>건 (${studs.size}명) → 졸업가능 <span style="color:var(--ok)">N→Y ${up}명</span>${down?` · <span style="color:var(--err)">Y→N ${down}명</span>`:''}`;
+}
+function applyBulk(){
+  const sel=BG.filter(g=>g.chk); if(!sel.length) return toast('변경할 교과목을 선택하세요.');
+  const rs=$('bReason').value; if(!rs){ $('bReason').focus(); return toast('변경사유를 선택하세요.'); }
+  const tgt=document.querySelector('input[name=bt]:checked').value;
+  const n=sel.reduce((a,g)=>a+g.stu.length,0);
+  if(!confirm(`${sel.length}개 교과목, ${n}건의 이수구분을 변경합니다.\n반영대상: ${tgt==='GRADE'?'성적원장 이수구분 (승인요청 생성)':'졸업사정용 이수구분'}\n계속하시겠습니까?`)) return;
+  const bno=newBatch(), reason=rs+($('bMemo').value?' - '+$('bMemo').value:''), touched=new Set(); let up=0;
+  const before=new Map(STU.map(s=>[s,s.res.pass]));
+  sel.forEach(g=>g.stu.forEach(s=>{ const r=s.rows.find(x=>x.code===g.code); logChange(bno,s,r,g.target,reason,tgt==='GRADE'?'일괄·성적원장':'일괄·사정용'); r.rec=g.target; touched.add(s); }));
+  if($('bRe').checked) touched.forEach(s=>{ s.res=assess(s); s.assessAt=now(); if(!before.get(s)&&s.res.pass) up++; });
+  closeM('mBulk'); renderAll(); toast(`${bno} · ${n}건 변경 · ${touched.size}명 재사정 · 졸업가능 N→Y ${up}명`);
+}
+
+/* ═════════ 공통 ═════════ */
+function showTab(t){ document.querySelectorAll('#rtabs div').forEach(d=>d.classList.toggle('on',d.dataset.t===t)); document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id===t)); }
+$('rtabs').addEventListener('click',e=>{ const d=e.target.closest('div[data-t]'); if(d) showTab(d.dataset.t); });
+function renderAll(){ renderList(); renderHead(); renderPaper(); renderCourses(); renderResult(); renderHist(); }
+function doQuery(){ runAssess(false); toast('2026학년도 1학기 공과대학 산업공학과 본사정 대상자 '+STU.length+'명을 조회했습니다.'); }
+function p2(n){return String(n).padStart(2,'0')}
+function now(){ const d=new Date(); return `${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())} ${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`; }
+function today(){ const d=new Date(); return `${d.getFullYear()}년 ${p2(d.getMonth()+1)}월 ${p2(d.getDate())}일`; }
+let tt; function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),2600); }
+function openM(id){$(id).classList.add('on')} function closeM(id){$(id).classList.remove('on')}
+runAssess(false);
+</script>
+</body>
+</html>
