@@ -191,7 +191,7 @@ table.g td select{width:100%;height:20px;border:1px solid #c4ccd6;font-size:12px
 <div class="top">
   <span class="ham" onclick="document.getElementById('lnb').classList.toggle('hide')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>
   <span class="logo"><i>PNU</i>부산대학교 교육정보시스템</span>
-  <div class="r"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3v18M12 8h5M12 12h5"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15zM10 20a2 2 0 004 0"/></svg></span><span><svg viewBox="0 0 24 24" fill="currentColor"><g><rect x="3" y="3" width="4" height="4"/><rect x="3" y="10" width="4" height="4"/><rect x="3" y="17" width="4" height="4"/><rect x="10" y="3" width="4" height="4"/><rect x="10" y="10" width="4" height="4"/><rect x="10" y="17" width="4" height="4"/><rect x="17" y="3" width="4" height="4"/><rect x="17" y="10" width="4" height="4"/><rect x="17" y="17" width="4" height="4"/></g></svg></span><span class="pill">교내</span><span>08:12:40</span><span class="usr"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3.5" fill="#0b3b85"/><path d="M5.5 18.5a7.5 7.5 0 0113 0" fill="#0b3b85"/></svg>김정목 ▾</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4H5v16h9M10 12h10M16 8l4 4-4 4"/></svg></span></div>
+  <div class="r"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3v18M12 8h5M12 12h5"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15zM10 20a2 2 0 004 0"/></svg></span><span><svg viewBox="0 0 24 24" fill="currentColor"><g><rect x="3" y="3" width="4" height="4"/><rect x="3" y="10" width="4" height="4"/><rect x="3" y="17" width="4" height="4"/><rect x="10" y="3" width="4" height="4"/><rect x="10" y="10" width="4" height="4"/><rect x="10" y="17" width="4" height="4"/><rect x="17" y="3" width="4" height="4"/><rect x="17" y="10" width="4" height="4"/><rect x="17" y="17" width="4" height="4"/></g></svg></span><span class="pill">교내</span><span>08:12:40</span><span class="usr"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3.5" fill="#0b3b85"/><path d="M5.5 18.5a7.5 7.5 0 0113 0" fill="#0b3b85"/></svg>담당자 ▾</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4H5v16h9M10 12h10M16 8l4 4-4 4"/></svg></span></div>
 </div>
 <div class="wrap">
   <div class="rail">
@@ -392,20 +392,20 @@ function crit(y){
 
 /* ═════════ 가상 대상자 ═════════ */
 const DEF=[ // 학번, 성명, 적용년도, 군휴학(년), 재입학, 전공선택 수, 교양선택 풀 index, 어학, 학적신청
- ['202027501','김가온',2020,2,0,14,[0,1,5,9],'Y','심화과정'],
- ['202027508','이도윤',2020,2,0,14,[0,3,6,10],'Y','주전공'],
- ['202027514','박서진',2020,0,0,13,[1,4,5,7],'Y','심화과정'],
- ['202027523','오세린',2020,0,0,14,[0,6,4,9],'Y','심화과정'],
- ['202027530','신우진',2020,0,0,14,[0,1,2,3],'Y','주전공'],
- ['202127504','최하람',2021,2,0,13,[0,2,5,10],'Y','주전공'],
- ['202127511','정유나',2021,0,0,13,[1,3,6,9],'Y','심화과정'],
- ['202127517','조은호',2021,0,0,13,[0,1,3,10],'N','주전공'],
- ['202127522','한지율',2021,0,0,13,[1,5,7,9],'Y','심화과정'],
- ['202127529','임태오',2021,2,0,12,[0,1,5,9],'Y','주전공'],
- ['202127535','배나래',2021,0,0,14,[2,5,7,10],'Y','심화과정'],
- ['202227502','강민재',2022,0,1,14,[0,1,5,10],'Y','주전공'],
- ['202227513','윤채원',2022,0,0,14,[2,4,6,8],'Y','심화과정'],
- ['202227520','서다인',2022,0,0,14,[0,5,6,11],'Y','주전공']
+ ['202099001','홍길동',2020,2,0,14,[0,1,5,9],'Y','심화과정'],
+ ['202099002','성춘향',2020,2,0,14,[0,3,6,10],'Y','주전공'],
+ ['202099003','이몽룡',2020,0,0,13,[1,4,5,7],'Y','심화과정'],
+ ['202099004','심청',2020,0,0,14,[0,6,4,9],'Y','심화과정'],
+ ['202099005','임꺽정',2020,0,0,14,[0,1,2,3],'Y','주전공'],
+ ['202199001','전우치',2021,2,0,13,[0,2,5,10],'Y','주전공'],
+ ['202199002','장길산',2021,0,0,13,[1,3,6,9],'Y','심화과정'],
+ ['202199003','김철수',2021,0,0,13,[0,1,3,10],'N','주전공'],
+ ['202199004','이영희',2021,0,0,13,[1,5,7,9],'Y','심화과정'],
+ ['202199005','박민수',2021,2,0,12,[0,1,5,9],'Y','주전공'],
+ ['202199006','최지수',2021,0,0,14,[2,5,7,10],'Y','심화과정'],
+ ['202299001','정다운',2022,0,1,14,[0,1,5,10],'Y','주전공'],
+ ['202299002','강하나',2022,0,0,14,[2,4,6,8],'Y','심화과정'],
+ ['202299003','윤보라',2022,0,0,14,[0,5,6,11],'Y','주전공']
 ];
 const GR=['A+','A+','A0','A0','B+','B+','B0','B0','C+','C0'], GP={'A+':4.5,'A0':4,'B+':3.5,'B0':3,'C+':2.5,'C0':2,'D+':1.5,'D0':1,'F':0};
 function rng(seed){ let s=seed; return ()=>{ s=(s*16807)%2147483647; return s/2147483647; }; }
@@ -579,7 +579,7 @@ function renderResult(){
 
 /* ═════════ 변경이력 ═════════ */
 function newBatch(){ const d=today().replace(/[^0-9]/g,'').slice(0,8); return `B-${d}-${String(batchSeq++).padStart(2,'0')}`; }
-function logChange(bno,s,r,to,reason,kind){ HIST.unshift({bno,at:now(),sid:s.id,name:s.name,code:r.code,from:r.rec,to,reason,kind,who:'김정목',undone:false}); }
+function logChange(bno,s,r,to,reason,kind){ HIST.unshift({bno,at:now(),sid:s.id,name:s.name,code:r.code,from:r.rec,to,reason,kind,who:'담당자',undone:false}); }
 function renderHist(){
   const s=STU[selIdx], L=HIST.filter(h=>h.sid===s.id);
   $('tHist').tBodies[0].innerHTML=L.map(h=>`<tr style="${h.undone?'color:#aaa;text-decoration:line-through':''}"><td class="c">${h.at}</td><td class="c">${h.bno}</td><td>${h.code} ${CM[h.code].name}</td>
